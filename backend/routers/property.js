@@ -31,6 +31,6 @@ router.post(
   handleCreateProperty,
 );
 
-router.post("/createComment", upload.none(), handleCreateComment);
+router.post("/comment/:propertyId", upload.none(), handleCreateComment);
 
 module.exports = router;
