@@ -20,13 +20,15 @@ const userSchema = new Schema(
       type: Number,
       required: true,
     },
+    salt: { 
+      type: String,
+    },
     password: {
       type: String,
       required: true,
     },
-    profileImageURL: {
+    avator: {
       type: String,
-      default: "/images/default.png",
     },
     role: {
       type: String,
