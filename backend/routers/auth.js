@@ -25,13 +25,6 @@ const upload = multer({storage: storage});
 const handleUserLogin = require ("../controllers/login.js")
 const handleUserSignUp = require ("../controllers/signup.js")
 
-router.get("/login", (req, res) => {
-  return res.redirect("/user/login");
-});
-router.get("/signup", (req, res) => {
-  return res.redirect("/user/signup");
-});
-
 router.post("/signup",upload.single("avator"), handleUserSignUp);
 router.post("/login", upload.none(), handleUserLogin);
 
