@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require("cors");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -13,7 +14,7 @@ const {
 } = require("./middlewares/authentication");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect("mongodb://localhost:27017/real-estate")
@@ -25,13 +26,17 @@ mongoose
   });
 
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
 
-app.use(express.static(path.resolve("./public")));
-
 app.use("/user", authRoute);
 
-app.listen(PORT, () => console.log("Server Started"));
+app.listen(PORT, () => console.log("Server Started at ", PORT));
