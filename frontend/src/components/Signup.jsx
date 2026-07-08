@@ -27,23 +27,25 @@ function Signup() {
 
       if (response.ok) {
         alert(result.msg);
+        reset();
       } else {
-        alert(result.msg);
+        alert(result.error);
       }
     } catch (error) {
-      alert("Upload Failed Error");
+      alert("Frontend API Call Error to Server, see console");
       console.log("Error", error);
     }
-    reset();
   };
 
   return (
     <>
-      <div className="flex flex-col min-h-screen justify-center items-center bg-gray-200 p-4"> 
-        
-        <h1 className="font-bold text-2xl sm:text-3xl lg:text-5xl mb-4">Sign Up</h1>
+      <div className="flex flex-col min-h-screen justify-center items-center bg-gray-200 p-4">
+        <h1 className="font-bold text-2xl sm:text-3xl lg:text-5xl mb-4">
+          Sign Up
+        </h1>
 
         <form
+          encType="multipart/form-data"
           onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-md lg:gap-2 gap-1 p-6 rounded-md bg-blue-300 flex flex-col"
         >
@@ -109,6 +111,5 @@ function Signup() {
     </>
   );
 }
-
 
 export default Signup;
