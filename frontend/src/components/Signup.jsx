@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 function Signup() {
   const { register, handleSubmit, reset } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -26,7 +28,7 @@ function Signup() {
       const result = await response.json();
 
       if (response.ok) {
-        alert(result.msg);
+        navigate("/user/login");
         reset();
       } else {
         alert(result.error);
@@ -80,7 +82,7 @@ function Signup() {
           <label className="font-bold mt-3">Password</label>
           <input
             className="border border-gray-300 bg-amber-50 px-3"
-            type="text"
+            type="password"
             {...register("password")}
             placeholder="Enter your password"
           />
