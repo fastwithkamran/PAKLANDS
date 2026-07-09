@@ -5,8 +5,9 @@ const Location = require("../models/location");
 
 router.get("/get-provinces", async (req, res) => {
   try {
-    const provincesList = await Location.find({ type: "province" });
+    const provincesList = await Location.distinct("province");
 
+    console.log(provincesList);
     if (!provincesList || provincesList.length === 0)
       return res.status(500).json({ msg: "Cannot Get Provinces From Server" });
 
@@ -19,7 +20,7 @@ router.get("/get-provinces", async (req, res) => {
 
 router.get("/get-cities", async (req, res) => {
   try {
-    const provinceName = req.query;
+    const { provinceName } = req.query;
 
     if (!provinceName || provinceName.length === 0)
       return res.status(404).json({ msg: "Province not found" });
@@ -37,7 +38,7 @@ router.get("/get-cities", async (req, res) => {
 
 router.get("/get-areas", async (req, res) => {
   try {
-    const cityName = req.query;
+    const { cityName } = req.query;
 
     if (!cityName || cityName.length === 0)
       return res.status(404).json({ msg: "City Not Found" });
