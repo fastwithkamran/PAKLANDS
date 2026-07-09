@@ -1,6 +1,5 @@
 function SellerHome() {
   return (
-    <main>
       <div className="grid md:grid-cols-3 lg:grid-cols-3 grid-cols-2 w-full mt-2">
         <img
           src="/home_1.png"
@@ -24,7 +23,6 @@ function SellerHome() {
           className="w-full object-cover h-full hidden md:block "
         />
       </div>
-    </main>
   );
 }
 
