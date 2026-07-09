@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const route = Router();
+const router = Router();
 
 const multer = require("multer");
 const cloudinaryModule = require("cloudinary");
