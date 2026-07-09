@@ -11,11 +11,21 @@ import {
   RouterProvider,
 } from "react-router";
 
-import { Signup, Login } from "./components";
+import {
+  Signup,
+  Login,
+  Home,
+  SellerHome,
+  BuyerHome,
+  CreateProperty,
+  PropertyPage,
+  SellerPosts,
+} from "./components";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route path="/" element={<PropertyPage />} />
       <Route path="/user/signup" element={<Signup />} />
       <Route path="/user/login" element={<Login />} />
     </Route>,
