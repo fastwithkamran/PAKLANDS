@@ -15,8 +15,6 @@ import {
   Signup,
   Login,
   Home,
-  SellerHome,
-  BuyerHome,
   CreateProperty,
   PropertyPage,
   SellerPosts,
@@ -25,9 +23,12 @@ import {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="/" element={<PropertyPage />} />
-      <Route path="/user/signup" element={<Signup />} />
-      <Route path="/user/login" element={<Login />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/user/create-property" element={<CreateProperty />} />
+      <Route path="/user/property-page" element={<PropertyPage />} />
+      <Route path="/user/seller-posts" element={<SellerPosts />} />
+      <Route path="/auth/signup" element={<Signup />} />
+      <Route path="/auth/login" element={<Login />} />
     </Route>,
   ),
 );
