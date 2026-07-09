@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 
 const authRoute = require("./routers/auth");
 const propertyRoute = require("./routers/property");
+const locationRoute = require("./routers/location")
 
 const {
   checkForAuthenticationCookie,
@@ -35,10 +36,10 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
-
 app.use(cookieParser());
 
 app.use("/user", authRoute);
 app.use("/property", checkForAuthenticationCookie("token"), propertyRoute);
+app.use("/location", locationRoute);
 
 app.listen(PORT, () => console.log("Server Started at ", PORT));
