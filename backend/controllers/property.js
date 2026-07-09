@@ -12,8 +12,12 @@ const handleCreateProperty = async (req, res) => {
     const property = await Property.create({
       title,
       description,
-      createdBy: req.user._id,
+      country,
+      province,
+      city,
+      area,
       propertyImages,
+      createdBy: req.user._id,
     });
 
     return res.status(201).json({ msg: "Property Advertisement Created", data: property });
