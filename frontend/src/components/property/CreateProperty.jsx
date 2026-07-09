@@ -1,12 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
 function CreateProperty() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm();
   const navigate = useNavigate();
   const [descriptionList, setDescriptionList] = useState([]);
   const [currentDescription, setCurrentDescription] = useState("");
+
+  const [provinces, setProvinces] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [areas, setAreas] = useState([]);
+
+  const selectedProvince = watch("province");
+  const selectedCity = watch("city");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_PROVINCES_LOCATION_API,
+        );
+        console.log(
+          "API URL Check:",
+          import.meta.env.VITE_PROVINCES_LOCATION_API,
+        );
+        if (response.ok) {
+          const jsonResult = await response.json();
+          console.log(jsonResult);
+          const ProvinceNames = jsonResult.map((item) => item.province);
+
+          setProvinces(ProvinceNames);
+        }
+      } catch (error) {
+        alert("FrontEnd API Call Error, see console");
+        console.log("Error", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_CITIES_LOCATION_API}?provinceName=${encodeURIComponent(selectedProvince)}`,
+        );
+
+        if (response.ok) {
+          const jsonResult = await response.json();
+          setCities(jsonResult);
+        }
+      } catch (error) {
+        alert("FrontEnd API Call Error, see console");
+        console.log("Error", error);
+      }
+    };
+    fetchData();
+  }, [selectedProvince]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_AREAS_LOCATION_API}?cityName=${encodeURIComponent(selectedCity)}`,
+        );
+
+        if (response.ok) {
+          const jsonResult = await response.json();
+          setAreas(jsonResult);
+        }
+      } catch (error) {
+        alert("FrontEnd API Call Error, see console");
+        console.log("Error", error);
+      }
+    };
+    fetchData();
+  }, [selectedCity]);
 
   const AddDescription = (e) => {
     e.preventDefault();
@@ -29,9 +99,9 @@ function CreateProperty() {
       formData.append("description", JSON.stringify(descriptionList));
 
       if (data.propertyImages && data.propertyImages.length > 0) {
-        const maxImages = data.propertyImages.slice(0, 5);
+        const files = Array.from(data.propertyImages).slice(0, 5);
 
-        maxImages.forEach((image) => {
+        files.forEach((image) => {
           formData.append("propertyImages[]", image);
         });
       }
@@ -48,7 +118,7 @@ function CreateProperty() {
       const result = await response.json();
 
       if (response.ok) {
-        navigate("/user/login");
+        navigate("/");
         setDescriptionList([]);
         reset();
       } else {
@@ -78,7 +148,7 @@ function CreateProperty() {
           {...register("title")}
           placeholder="e.g: BUNGALOW ON SELL | RENT NEAR XYZ PLACE"
         />
-        <label className="font-bold mt-3">Description</label>
+        <label className="font-bold mt-3">Adjectives</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
@@ -106,12 +176,36 @@ function CreateProperty() {
         </ol>
 
         <label className="font-bold mt-3">Location</label>
-        <input
-          className="border border-gray-300 bg-amber-50 px-3"
-          type="text"
-          {...register("location")}
-          placeholder="Clifton - Block 5, Karachi"
-        />
+        <label className="font-bold mt-3">Select Country</label>
+        <select {...register("country")}>
+          <option key={"Pakistan"} value={"Pakistan"}>
+            Pakistan
+          </option>
+        </select>
+        <label className="font-bold mt-3">Select Province</label>
+        <select {...register("province")} className="bg-amber-50">
+          {provinces.map((province) => (
+            <option key={province} value={province}>
+              {province}
+            </option>
+          ))}
+        </select>
+        <label className="font-bold mt-3">Select City</label>
+        <select {...register("city")} className="bg-amber-50">
+          {cities.map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </select>
+        <label className="font-bold mt-3">Select Area</label>
+        <select {...register("area")} className="bg-amber-50">
+          {areas.map((area) => (
+            <option key={area} value={area}>
+              {area}
+            </option>
+          ))}
+        </select>
         <label className="font-bold mt-3">Price</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
