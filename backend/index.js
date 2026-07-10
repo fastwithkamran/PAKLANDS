@@ -3,17 +3,12 @@ const cors = require("cors");
 
 const express = require("express");
 const mongoose = require("mongoose");
-const path = require("path");
 
 const cookieParser = require("cookie-parser");
 
 const authRoute = require("./routers/auth");
 const propertyRoute = require("./routers/property");
 const locationRoute = require("./routers/location")
-
-const {
-  checkForAuthenticationCookie,
-} = require("./middlewares/authentication");
 
 const handleSeedLocations = require("./services/seedLocation")
 
@@ -37,13 +32,12 @@ app.use(
   }),
 );
 
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 handleSeedLocations();
 
 app.use("/user", authRoute);
-app.use("/property", checkForAuthenticationCookie("token"), propertyRoute);
+app.use("/property", propertyRoute);
 app.use("/location", locationRoute);
 
 app.listen(PORT, () => console.log("Server Started at ", PORT));
