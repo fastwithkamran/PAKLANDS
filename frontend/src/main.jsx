@@ -17,7 +17,6 @@ import {
   Home,
   CreateProperty,
   PropertyPage,
-  SellerPosts,
 } from "./components";
 
 const router = createBrowserRouter(
@@ -26,7 +25,6 @@ const router = createBrowserRouter(
       <Route path="/" element={<Home />} />
       <Route path="/user/create-property" element={<CreateProperty />} />
       <Route path="/user/property-page" element={<PropertyPage />} />
-      <Route path="/user/seller-posts" element={<SellerPosts />} />
       <Route path="/auth/signup" element={<Signup />} />
       <Route path="/auth/login" element={<Login />} />
     </Route>,

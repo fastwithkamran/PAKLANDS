@@ -7,7 +7,6 @@ import Home from "./Home.jsx";
 
 import CreateProperty from "./property/CreateProperty";
 import PropertyPage from "./property/PropertyPage";
-import SellerPosts from "./property/SellerPosts";
 
 import Footer from "./footer/Footer.jsx";
 
@@ -18,6 +17,5 @@ export {
   Home,
   CreateProperty,
   PropertyPage,
-  SellerPosts,
   Footer,
 };
