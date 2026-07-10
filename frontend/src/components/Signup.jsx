@@ -11,26 +11,26 @@ function Signup() {
 
       formData.append("fullName", data.fullName);
       formData.append("email", data.email);
-      formData.append("cnic", data.cnic);
       formData.append("phone", data.phone);
       formData.append("password", data.password);
-      
+
       if (data.avator && data.avator.length > 0) {
         formData.append("avator", data.avator[0]);
       }
 
-      const response = await fetch("http://localhost:8000/user/signup", {
+      const response = await fetch(import.meta.env.VITE_SIGNUP_API, {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        navigate("/user/login");
         reset();
+        navigate("/");
       } else {
-        alert(result.error);
+        alert(`Errror: ${result.msg}`);
       }
     } catch (error) {
       alert("Frontend API Call Error to Server, see console");
@@ -63,13 +63,6 @@ function Signup() {
           {...register("email")}
           placeholder="Enter your email"
         />
-        <label className="font-bold mt-3">CNIC</label>
-        <input
-          className="border border-gray-300 bg-amber-50 px-3"
-          type="text"
-          {...register("cnic")}
-          placeholder="Enter your cnic"
-        />
         <label className="font-bold mt-3">Phone</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
@@ -91,7 +84,7 @@ function Signup() {
           accept="image/png, image/jpeg, image/jpg, image/webp"
           {...register("avator")}
         />
-      
+
         <button
           type="submit"
           className="bg-blue-500 text-white font-bold mt-3 mx-auto w-1/2 px-auto rounded-md hover:bg-gray-600"
