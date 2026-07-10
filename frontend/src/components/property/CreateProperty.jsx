@@ -21,16 +21,10 @@ function CreateProperty() {
         const response = await fetch(
           import.meta.env.VITE_PROVINCES_LOCATION_API,
         );
-        console.log(
-          "API URL Check:",
-          import.meta.env.VITE_PROVINCES_LOCATION_API,
-        );
+
         if (response.ok) {
           const jsonResult = await response.json();
-          console.log(jsonResult);
-          const ProvinceNames = jsonResult.map((item) => item.province);
-
-          setProvinces(ProvinceNames);
+          setProvinces(jsonResult);
         }
       } catch (error) {
         alert("FrontEnd API Call Error, see console");
@@ -41,6 +35,10 @@ function CreateProperty() {
   }, []);
 
   useEffect(() => {
+    if (!selectedProvince) {
+      setCities([]);
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -60,6 +58,11 @@ function CreateProperty() {
   }, [selectedProvince]);
 
   useEffect(() => {
+    if (!selectedCity) {
+      setAreas([]);
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -94,7 +97,10 @@ function CreateProperty() {
       const formData = new FormData();
 
       formData.append("title", data.title);
-      formData.append("location", data.location);
+      formData.append("country", data.location);
+      formData.append("province", data.location);
+      formData.append("city", data.location);
+      formData.append("area", data.location);
       formData.append("price", data.price);
       formData.append("description", JSON.stringify(descriptionList));
 
@@ -102,12 +108,12 @@ function CreateProperty() {
         const files = Array.from(data.propertyImages).slice(0, 5);
 
         files.forEach((image) => {
-          formData.append("propertyImages[]", image);
+          formData.append("propertyImages", image);
         });
       }
 
       const response = await fetch(
-        "http://localhost:8000/property/create-post",
+        import.meta.env.VITE_CREATE_POST_API,
         {
           method: "POST",
           body: formData,
@@ -115,14 +121,14 @@ function CreateProperty() {
         },
       );
 
-      const result = await response.json();
+      const result = await response.json() 
 
       if (response.ok) {
-        navigate("/");
         setDescriptionList([]);
         reset();
+        navigate("/");
       } else {
-        alert(result.error);
+        alert(`Error ${result.msg}`);
       }
     } catch (error) {
       alert("Frontend API Call Error to Server, see console");
@@ -184,6 +190,7 @@ function CreateProperty() {
         </select>
         <label className="font-bold mt-3">Select Province</label>
         <select {...register("province")} className="bg-amber-50">
+          <option value="">Select Province</option>
           {provinces.map((province) => (
             <option key={province} value={province}>
               {province}
@@ -192,6 +199,7 @@ function CreateProperty() {
         </select>
         <label className="font-bold mt-3">Select City</label>
         <select {...register("city")} className="bg-amber-50">
+          <option value="">Select City</option>
           {cities.map((city) => (
             <option key={city} value={city}>
               {city}
@@ -200,6 +208,7 @@ function CreateProperty() {
         </select>
         <label className="font-bold mt-3">Select Area</label>
         <select {...register("area")} className="bg-amber-50">
+          <option value="">Select Area</option>
           {areas.map((area) => (
             <option key={area} value={area}>
               {area}
