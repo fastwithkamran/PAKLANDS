@@ -11,7 +11,7 @@ function Navbar() {
         credentials: "include",
         method: "GET",
       });
-      console.log(response);
+
       const result = await response.json();
 
       if (response.ok) {
