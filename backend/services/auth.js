@@ -8,9 +8,8 @@ function createTokenForUser(user) {
     _id: user._id,
     name: user.fullName,
     email: user.email,
-    role: user.role,
   };
-  const token = JWT.sign(payload, secret);
+  const token = JWT.sign(payload, secret, {expiresIn: '90d'});
   return token;
 }
 
