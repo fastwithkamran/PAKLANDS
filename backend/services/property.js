@@ -1,0 +1,48 @@
+const Property = require("../models/property");
+
+const handlePropertyHome = async (req, res) => {
+  try {
+    const result = await Property.find({})
+      .select({
+        _id: 1,
+        title: 1,
+        province: 1,
+        city: 1,
+        area: 1,
+        propertyImages: { $slice: 1 },
+      })
+      .lean();
+
+    if (!result) return res.status(500).json({ msg: "Cannot Find Properties" });
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({ msg: "Server failed to send data" });
+  }
+};
+
+const handlePropertyPage = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Property.findById(id)
+      .select({
+        title: 1,
+        province: 1,
+        city: 1,
+        area: 1,
+        description: { $slice: 20 },
+        propertyImages: { $slice: 5 },
+      })
+      .lean();
+
+    if (!result) return res.status(500).json({ msg: "Cannot Find Properties" });
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log("Error", error);
+    return res.status(500).json({ msg: "Server failed to send data" });
+  }
+};
+
+module.exports = { handlePropertyHome, handlePropertyPage };
