@@ -24,7 +24,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route path="/" element={<Home />} />
       <Route path="/user/create-property" element={<CreateProperty />} />
-      <Route path="/user/property-page" element={<PropertyPage />} />
+      <Route path="/user/property-page/:id" element={<PropertyPage />} />
       <Route path="/auth/signup" element={<Signup />} />
       <Route path="/auth/login" element={<Login />} />
     </Route>,
