@@ -101,7 +101,7 @@ function CreateProperty() {
       formData.append("province", data.province);
       formData.append("city", data.city);
       formData.append("area", data.area);
-      formData.append("area", data.street);
+      formData.append("street", data.street);
       formData.append("price", data.price);
       formData.append("description", JSON.stringify(descriptionList));
       formData.append("allowWhatsApp",data.allowWhatsApp);
