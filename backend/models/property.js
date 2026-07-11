@@ -6,29 +6,43 @@ const propertySchema = new Schema(
       type: String,
       required: true,
     },
-    description: [{
+    description: {
       type: String,
       required: true,
-    }],
+    },
     country: {
-      type:String,
+      type: String,
       default: "Pakistan",
     },
     province: {
-      type:String,
-      default: "Pakistan",
+      type: String,
+      required: true,
     },
     city: {
-      type:String,
-      default: "Pakistan",
+      type: String,
+      required: true,
     },
     area: {
-      type:String,
-      default: "Pakistan",
-    },
-    propertyImages: [{
       type: String,
-    }],
+      required: true,
+    },
+    street: {
+      type: String,
+      required: true,
+    },
+    propertyImages: [
+      {
+        type: String,
+      },
+    ],
+    allowWhatsApp: {
+      type: Boolean,
+      default: false,
+    },
+    allowEmail: {
+      type: Boolean,
+      default: false,
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "user",
