@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function CreateProperty() {
   const { register, handleSubmit, reset, watch } = useForm();
@@ -101,8 +101,11 @@ function CreateProperty() {
       formData.append("province", data.province);
       formData.append("city", data.city);
       formData.append("area", data.area);
+      formData.append("area", data.street);
       formData.append("price", data.price);
       formData.append("description", JSON.stringify(descriptionList));
+      formData.append("allowWhatsApp",data.allowWhatsApp);
+      formData.append("allowEmail",data.allowEmail);
 
       if (data.propertyImages && data.propertyImages.length > 0) {
         const files = Array.from(data.propertyImages).slice(0, 5);
@@ -112,16 +115,13 @@ function CreateProperty() {
         });
       }
 
-      const response = await fetch(
-        import.meta.env.VITE_CREATE_POST_API,
-        {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        },
-      );
+      const response = await fetch(import.meta.env.VITE_CREATE_POST_API, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
 
-      const result = await response.json() 
+      const result = await response.json();
 
       if (response.ok) {
         setDescriptionList([]);
@@ -138,8 +138,12 @@ function CreateProperty() {
 
   return (
     <>
+      <div className="mr-auto">
+        <Link to="/" className="md:text-2xl bg-amber-50 rounded-2xl border-2 p-2 text-pink-800">Back</Link>
+      </div>
+
       <h1 className="font-bold text-2xl sm:text-3xl lg:text-5xl mb-4">
-        Advertise Your Property
+        Sell Your Property
       </h1>
 
       <form
@@ -154,7 +158,7 @@ function CreateProperty() {
           {...register("title")}
           placeholder="e.g: BUNGALOW ON SELL | RENT NEAR XYZ PLACE"
         />
-        <label className="font-bold mt-3">Adjectives</label>
+        <label className="font-bold mt-3">Features</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
@@ -181,9 +185,30 @@ function CreateProperty() {
           ))}
         </ol>
 
-        <label className="font-bold mt-3">Location</label>
+        <label className="font-bold mt-3">Price</label>
+        <input
+          className="border border-gray-300 bg-amber-50 px-3"
+          type="text"
+          {...register("price")}
+          placeholder="RS 20 Lacs"
+        />
+        <label>
+          <span className="font-bold mt-3">Property Images</span>
+          <span className="text-sm"> ( Can choose upto 5 ) </span>
+        </label>
+        <input
+          className="border border-gray-300 bg-amber-50 px-3"
+          type="file"
+          multiple
+          accept="image/png, image/jpeg, image/jpg, image/webp"
+          {...register("propertyImages")}
+        />
+
+        <div>
+          <h3 className="font-bold mt-3 md:text-2xl">Location</h3>
+        </div>
         <label className="font-bold mt-3">Select Country</label>
-        <select {...register("country")}>
+        <select {...register("country")} className="bg-gray-500">
           <option key={"Pakistan"} value={"Pakistan"}>
             Pakistan
           </option>
@@ -215,21 +240,33 @@ function CreateProperty() {
             </option>
           ))}
         </select>
-        <label className="font-bold mt-3">Price</label>
+        <label className="font-bold mt-3">Street</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
-          {...register("price")}
-          placeholder="RS 20 Lacs"
+          {...register("street")}
+          placeholder="Kashmir Road, House No R31"
         />
-        <label className="font-bold mt-3">Property Images</label>
-        <input
-          className="border border-gray-300 bg-amber-50 px-3"
-          type="file"
-          multiple
-          accept="image/png, image/jpeg, image/jpg, image/webp"
-          {...register("propertyImages")}
-        />
+
+        <div>
+          <h3 className="font-bold mt-3 md:text-2xl">
+            How Should Buyer Contact You
+          </h3>
+        </div>
+
+        <label className="font-bold mt-3">
+          Through WhatsApp
+          <input
+            type="checkbox"
+            className="ml-3"
+            {...register("allowWhatsApp")}
+          />
+        </label>
+        <label className="font-bold mt-3">
+          Through Email
+          <input type="checkbox" className="ml-3" {...register("allowEmail")} />
+        </label>
+
         <button
           type="submit"
           className="bg-blue-500 text-white font-bold mt-3 mx-auto w-1/2 px-auto rounded-md hover:bg-gray-600"
