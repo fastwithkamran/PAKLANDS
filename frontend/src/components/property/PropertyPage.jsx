@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 function PropertyPage() {
   const [title, setTitle] = useState("");
@@ -19,10 +20,13 @@ function PropertyPage() {
   const message = `Hey, ${sellerName}\n\nCustomer is Interest for your property ${title} through PakLands... Reply them as Soon`;
   const encodedMessage = encodeURIComponent(message);
 
+
+  const id = useParams();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_PROPERTY_INFO_API, {
+        const response = await fetch(`import.meta.env.VITE_PROPERTY_INFO_API/${id}`, {
           method: "GET",
         });
         const result = await response.json();
