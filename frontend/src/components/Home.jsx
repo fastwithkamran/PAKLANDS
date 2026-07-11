@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 
 function Home() {
-  const {register, watch} = useForm();
+  const { register, watch } = useForm();
   const [properties, setProperties] = useState([]);
+  const allPropertiesRef = useRef([]);
 
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
@@ -50,6 +51,7 @@ function Home() {
 
         if (response.ok) {
           setProperties(result);
+          allPropertiesRef.current = result;
         } else {
           alert(`Error ${response.msg}`);
         }
@@ -128,10 +130,20 @@ function Home() {
   }, [selectedCity]);
 
   useEffect(() => {
+    if (!selectedProvince && !selectedCity && !selectedArea) {
+      setProperties(allPropertiesRef.current);
+      return;
+    }
+
+    const queryParams = new URLSearchParams();
+    if (selectedProvince) queryParams.set("province", selectedProvince);
+    if (selectedCity) queryParams.set("city", selectedCity);
+    if (selectedArea) queryParams.set("area", selectedArea);
+
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_FILTER_API}?province=${encodeURIComponent(selectedProvince)}?city=${encodeURIComponent(selectedCity)}?area=${encodeURIComponent(selectedArea)}`,
+          `${import.meta.env.VITE_FILTER_API}?${queryParams.toString()}`,
         );
         const result = await response.json();
 
@@ -168,9 +180,9 @@ function Home() {
         />
       </div>
 
-      <form className="w-full bg-gray-400 mt-4 flex justify-center gap-5">
-        <label className="font-bold text-2xl">Filter:</label>
-        
+      <form className="w-full bg-gray-400 mt-4 flex flex-col md:flex-row md:justify-center gap-5">
+        <label className="font-bold text-2xl text-center">Filter:</label>
+
         <select {...register("province")} className="bg-amber-50">
           <option value="">Select Province</option>
           {provinces.map((province) => (
@@ -179,7 +191,7 @@ function Home() {
             </option>
           ))}
         </select>
-        
+
         <select {...register("city")} className="bg-amber-50">
           <option value="">Select City</option>
           {cities.map((city) => (
@@ -188,7 +200,7 @@ function Home() {
             </option>
           ))}
         </select>
-        
+
         <select {...register("area")} className="bg-amber-50">
           <option value="">Select Area</option>
           {areas.map((area) => (
@@ -208,22 +220,26 @@ function Home() {
           properties?.map((property) => (
             <div
               key={property._id}
-              className="flex flex-row border-2 rounded-md bg-blue-300 mt-3 p-2 gap-4"
+              className="flex md:flex-row flex-col border-2 rounded-md bg-blue-300 mt-3 p-2 gap-4"
             >
+              {console.log(property.propertyImages)}
               <img
                 src={property.propertyImages}
                 alt="PropertyImage"
-                className="object-cover w-50 h-45"
+                className="object-cover md:w-50 w-full h-50"
               />
-              <div className="flex flex-col flex-1 justify-between">
-                <h3 className="text-2xl font-bold p-2">{property.title}</h3>
-                <p className="whitespace-nowrap flex justify-end pr-2">
+              <div className="md:flex md:flex-col flex-1">
+                <h3 className="md:text-2xl font-bold p-2">{property.title}</h3>
+                <p className="flex md:justify-end pr-2">
                   📍{property.street}, {property.area}, {property.city},{" "}
                   {property.province}
                 </p>
-                <div className="flex justify-end">
+                <div className="text-black rounded-2xl p-1 md:text-2xl mt-2">
+                  Price: {property.price}
+                </div>
+                <div className="md:flex md:justify-end">
                   <button
-                    className="bg-red-500 p-2 w-1/7 rounded-3xl text-white cursor-pointer hover:bg-gray-500"
+                    className="bg-red-500 p-2 mt-2 rounded-2xl text-white cursor-pointer hover:bg-gray-500"
                     onClick={() => handlePropertyPage(property._id)}
                   >
                     View Details
