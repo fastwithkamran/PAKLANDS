@@ -3,19 +3,40 @@ const Property = require("../models/property");
 const handlePropertyFilter = async (req, res) => {
   try {
     const { province, city, area } = req.query;
-
-    if (area && area !== "undefined") {
+    let filter = {};
+    if (area) {
       filter.area = area;
-    } else if (city && city !== "undefined") {
+    } else if (city) {
       filter.city = city;
-    } else if (province && province !== "undefined") {
+    } else if (province) {
       filter.province = province;
     } else {
-      const result = await Property.find({});
+      const result = await Property.find({})
+        .select({
+          _id: 1,
+          title: 1,
+          province: 1,
+          city: 1,
+          area: 1,
+          street: 1,
+          price: 1,
+          propertyImages: { $slice: 1 },
+        })
+        .lean();
       return res.status(200).json(result);
     }
-
-    const result = await Property.find(filter);
+    const result = await Property.find(filter)
+      .select({
+        _id: 1,
+        title: 1,
+        province: 1,
+        city: 1,
+        area: 1,
+        street: 1,
+        price: 1,
+        propertyImages: { $slice: 1 },
+      })
+      .lean();
     return res.status(200).json(result);
   } catch (error) {
     console.log("Error Filtering", error);
