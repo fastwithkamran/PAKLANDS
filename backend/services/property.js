@@ -16,7 +16,6 @@ const handlePropertyHome = async (req, res) => {
       .lean();
 
     if (!result) return res.status(500).json({ msg: "Cannot Find Properties" });
-
     return res.status(200).json(result);
   } catch (error) {
     console.log("Error", error);
@@ -41,7 +40,7 @@ const handlePropertyPage = async (req, res) => {
         propertyImages: { $slice: 5 },
         createdBy: 1,
       })
-      .populate("createdBy", "fullName email phone")
+      .populate("createdBy", "fullName email phone avator")
       .lean();
 
     if (!result) return res.status(500).json({ msg: "Cannot Find Properties" });
