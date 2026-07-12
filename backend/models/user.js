@@ -6,22 +6,33 @@ const userSchema = new Schema(
   {
     fullName: {
       type: String,
-      required: true,
+      required: [true, "Name not found"],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email not found"],
+      unique: true,
+      lowercase: true,
+      validate: {
+        validator: (value) => validator.isEmail(value),
+        message: "Please provide a valid email address",
+      },
     },
     phone: {
       type: Number,
-      required: true,
+      required: [true, "Phone Number not found"],
+      unique: true,
+      match: [
+        /^923\d{9}$/,
+        "Please provide a valid Pakistani mobile number in 923123456789 format",
+      ],
     },
-    salt: { 
+    salt: {
       type: String,
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Password not provided"],
     },
     avator: {
       type: String,
