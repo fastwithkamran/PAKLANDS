@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const router = Router();
 
+require("dotenv").config();
+
 const multer = require("multer");
 const cloudinaryModule = require("cloudinary");
 const cloudinary = cloudinaryModule.v2;
@@ -32,8 +34,27 @@ const {
   checkForAuthenticationCookie,
 } = require("../middlewares/authentication");
 
-router.get("/verify-auth",checkForAuthenticationCookie("token"), (req,res) => { 
-  return res.status(200).json({msg: "Success"});
+router.get(
+  "/verify-auth",
+  checkForAuthenticationCookie("token"),
+  (req, res) => {
+    return res.status(200).json({ msg: "Success" });
+  },
+);
+
+router.get("/logout", (req, res) => {
+  try {
+    res.clearCookie("token", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    return res.status(200).json({ msg: "Logout Success" });
+  } catch (error) {
+    return res.status(500).json({ msg: "Server Error During Logout" });
+  }
 });
 
 module.exports = router;
