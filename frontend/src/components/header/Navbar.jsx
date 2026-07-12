@@ -1,11 +1,15 @@
 import { useLocation, useNavigate } from "react-router";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 function Navbar() {
   const location = useLocation();
   const atHome = location.pathname === "/";
   const navigate = useNavigate();
 
-  const handleCreateAd = async () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const handleCheckAuthAndNavigate = async (event) => {
     try {
       const response = await fetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
         credentials: "include",
@@ -13,16 +17,68 @@ function Navbar() {
       });
 
       const result = await response.json();
+      const action = event.currentTarget.dataset.action;
 
       if (response.ok) {
-        navigate("/user/create-property");
+        if (action === "CreateAd") navigate("/user/create-property");
+        else if (action === "Logout") {
+          try {
+            const response = await fetch(import.meta.env.VITE_LOGOUT_API);
+            const result = await response.json();
+            if (response.ok) {
+              navigate("/auth/login");
+            } else {
+              toast.error(`Error: ${result.msg}`);
+              navigate("/");
+            }
+          } catch (error) {
+            console.error(error);
+            toast.error("Error failed to fetch API request");
+          }
+        } else if (action === "AllPosts") {
+          try {
+            const response = await fetch(import.meta.env.VITE.USERID, {
+              method: "GET",
+              credentials: true,
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+              navigate(`/user/allposts/${result.id}`);
+            } else {
+              toast.error(`Error: ${result.msg}`);
+              navigate("/");
+            }
+          } catch (error) {
+            console.error(error);
+            toast.error("Error failed to fetch API request");
+          }
+        } else if (action === "Settings") {
+          try {
+            const response = await fetch(import.meta.env.VITE.USERID, {
+              method: "GET",
+              credentials: true,
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+              navigate(`/user/settings/${result.id}`);
+            } else {
+              toast.error(`Error: ${result.msg}`);
+              navigate("/");
+            }
+          } catch (error) {
+            console.error(error);
+            toast.error("Error failed to fetch API request");
+          }
+        }
       } else {
-        alert(`Error: ${result.msg}`);
+        toast.error(`Error: ${result.msg}`);
         navigate("/auth/login");
       }
     } catch (error) {
-      console.log("Error", error);
-      alert("Error while Fetching API from Frontend");
+      console.error(error);
+      toast.error("Error failed to fetch API request");
     }
   };
 
@@ -32,12 +88,55 @@ function Navbar() {
         <img src="/logo.png" alt="Logo" className="lg:w-1/6 w-1/4" />
 
         {atHome && (
-          <button
-            className="border-2 border-amber-50 rounded-lg p-2 m-3 flex items-center bg-red-500 text-amber-50 cursor-pointer hover:bg-gray-500"
-            onClick={handleCreateAd}
-          >
-            Create
-          </button>
+          <>
+            <div className="flex flex-row">
+              <div className="relative inline-block">
+                <button
+                  className="border-2 border-amber-50 rounded-lg flex items-center p-2 mt-3 ml-3 mb-3 bg-blue-500 text-amber-50 cursor-pointer hover:bg-gray-500"
+                  onClick={() => setMenuOpen(!isMenuOpen)}
+                >
+                  ☰
+                </button>
+                {isMenuOpen && (
+                  <ul className="absolute bg-blue-50 cursor-pointer">
+                    <li className="font-bold text-blue-800 p-2">
+                      <button
+                        data-action="Settings"
+                        onClick={handleCheckAuthAndNavigate}
+                      >
+                        Settings
+                      </button>
+                    </li>
+                    <hr />
+                    <li className="font-bold whitespace-nowrap p-2 cursor-pointer">
+                      <button
+                        data-action="AllPosts"
+                        onClick={handleCheckAuthAndNavigate}
+                      >
+                        Your Ads
+                      </button>
+                    </li>
+                    <hr />
+                    <li className="font-bold text-red-800 p-2 cursor-pointer">
+                      <button
+                        data-action="Logout"
+                        onClick={handleCheckAuthAndNavigate}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </div>
+              <button
+                className="border-2 border-amber-50 rounded-lg p-2 m-3 flex items-center bg-red-500 text-amber-50 cursor-pointer hover:bg-gray-500"
+                data-action="CreateAd"
+                onClick={handleCheckAuthAndNavigate}
+              >
+                Create
+              </button>
+            </div>
+          </>
         )}
       </nav>
     </>
