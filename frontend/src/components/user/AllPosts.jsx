@@ -1,0 +1,98 @@
+import { useEffect, useState } from "react";
+import { Navigate } from "react-router";
+import { useParams } from "react-router";
+
+function AllPosts() {
+  const [properties, setProperties] = useState([]);
+  const { id } = useParams();
+  const navigate = Navigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `import.meta.env.VITE_PROPERTYINFO_ALLPOSTS_API/${id}`,
+          {
+            method: "GET",
+          },
+        );
+        const result = await response.json();
+
+        if (response.ok) {
+          setProperties(result);
+        } else {
+          alert(`Error ${response.msg}`);
+        }
+      } catch (error) {
+        console.log(error);
+        alert("FrontEnd API Call Error, see console");
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  const handlePropertyPage = async (id) => {
+    try {
+      const response = await fetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
+        credentials: "include",
+        method: "GET",
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        navigate(`/user/property-page/${id}`);
+      } else {
+        alert(`Error: ${result.msg}`);
+        navigate("/auth/login");
+      }
+    } catch (error) {
+      console.log("Error", error);
+      alert("Error while Fetching API from Frontend");
+    }
+  };
+
+  return (
+    <div className="mt-2 w-full">
+      {!properties || properties.length === 0 ? (
+        <div className="flex justify-center font-bold md:text-2xl mt-3 whitespace-nowrap">
+          There are no properties at this time
+        </div>
+      ) : (
+        properties?.map((property) => (
+          <div
+            key={property._id}
+            className="flex md:flex-row flex-col border-2 rounded-md bg-blue-300 mt-3 p-2 gap-4"
+          >
+            {console.log(property.propertyImages)}
+            <img
+              src={property.propertyImages}
+              alt="PropertyImage"
+              className="object-cover md:w-50 w-full h-50"
+            />
+            <div className="md:flex md:flex-col flex-1">
+              <h3 className="md:text-2xl font-bold p-2">{property.title}</h3>
+              <p className="flex md:justify-end pr-2">
+                📍{property.street}, {property.area}, {property.city},{" "}
+                {property.province}
+              </p>
+              <div className="text-black rounded-2xl p-1 md:text-2xl mt-2">
+                Price: {property.price}
+              </div>
+              <div className="md:flex md:justify-end">
+                <button
+                  className="bg-red-500 p-2 mt-2 rounded-2xl text-white cursor-pointer hover:bg-gray-500"
+                  onClick={() => handlePropertyPage(property._id)}
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
+export default AllPosts;
