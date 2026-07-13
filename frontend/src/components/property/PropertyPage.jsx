@@ -148,7 +148,7 @@ function PropertyPage() {
             >
               {isallowEmail ? (
                 <a
-                  href={`mailto:${sellerEmail}?subject=${subject}&body=${encodedBody}`}
+                  href={`mailto:${sellerEmail}?subject=${encodeURIComponent(subject)}&body=${encodedBody}`}
                   className="bg-blue-500 text-white font-bold mx-auto p-1 rounded-md hover:bg-gray-600 "
                 >
                   Email
@@ -158,7 +158,7 @@ function PropertyPage() {
               )}
               {isallowWhatsApp ? (
                 <a
-                  href={`https://wa.me${sellerPhoneNumber}?text=${encodedMessage}`}
+                  href={`https://wa.me/${sellerPhoneNumber}?text=${encodedMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-green-500 text-white font-bold mt-2 mx-auto p-1 rounded-md hover:bg-gray-600 "
