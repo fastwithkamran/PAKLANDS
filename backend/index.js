@@ -16,22 +16,30 @@ const handleSeedLocations = require("./services/seedLocation");
 const app = express();
 const PORT = process.env.PORT;
 
-mongoose
-  .connect("mongodb://localhost:27017/real-estate")
-  .then(() => {
-    console.log("MongoDB connected");
-  })
-  .catch((err) => {
-    console.log("Error", err);
-  });
+const allowedOrigins = ["http://localhost:5173"];
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   }),
 );
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Atlas Connected");
+  })
+  .catch((err) => {
+    console.log("Database Connection Failed", err);
+  });
 
 app.use(cookieParser());
 
@@ -42,4 +50,6 @@ app.use("/property", propertyRoute);
 app.use("/location", locationRoute);
 app.use("/profile", profileRoute);
 
-app.listen(PORT, () => console.log("Server Started at ", PORT));
+if (process.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log("Server Started at ", PORT));
+}
