@@ -22,11 +22,16 @@ const storage = new CloudinaryStorage({
   },
 });
 
-
 const upload = multer({ storage: storage });
 
-const handleUpdateProfile = require("../controllers/updateProfile");
+const {handleUpdateProfile, handleUpdatePassword} = require("../controllers/updateProfile");
 
-router.patch("/profile-update/:id", upload.single("avator"), handleUpdateProfile);
+router.patch(
+  "/profile-update/:id",
+  upload.single("avator"),
+  handleUpdateProfile,
+);
+
+router.patch("/update-password/:id", upload.none(), handleUpdatePassword);
 
 module.exports = router;
