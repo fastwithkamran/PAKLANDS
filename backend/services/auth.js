@@ -7,7 +7,6 @@ function createTokenForUser(user) {
   const payload = {
     _id: user._id,
     name: user.fullName,
-    email: user.email,
   };
   const token = JWT.sign(payload, secret, { expiresIn: "90d" });
   return token;
