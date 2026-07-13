@@ -5,11 +5,11 @@ const handleUserSignUp = async (req, res) => {
   try {
     const { fullName, email, password, phone } = req.body;
 
-    const emailDuplicate = User.findOne({ email });
+    const emailDuplicate = await User.findOne({ email });
     if (emailDuplicate)
       return res.status(400).json({ msg: "This Email is already in use" });
 
-    const phoneDuplicate = User.findOne({ phone });
+    const phoneDuplicate = await User.findOne({ phone });
     if (phoneDuplicate)
       return res.status(400).json({ msg: "This Phone is already in use" });
 
