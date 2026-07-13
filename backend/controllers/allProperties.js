@@ -20,10 +20,25 @@ const handleAllProperties = async (req, res) => {
     return res.status(200).json(result);
   } catch (error) {
     console.error("Error All Properties ", error);
-    return res
-      .status(500)
-      .json({ msg: "Error listing all properties" });
+    return res.status(500).json({ msg: "Error listing all properties" });
   }
 };
 
-module.exports = handleAllProperties;
+const handleDeletePropety = async (req, res) => {
+  try {
+    const propertyId = req.params.id;
+
+    const response = await Property.findOneAndDelete(propertyId);
+
+    if (response.ok) {
+      return res.status(200).json({ msg: "Property Deleted Successfully" });
+    } else {
+      return res.status(404).json({ msg: "Property could not found" });
+    }
+  } catch (error) {
+    console.error("Error Deleting Property", error);
+    return res.status(500).json({ msg: "Property could not Deleted" });
+  }
+};
+
+module.exports = { handleAllProperties, handleDeletePropety };
