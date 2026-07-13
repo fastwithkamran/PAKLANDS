@@ -34,7 +34,7 @@ function CreateProperty() {
           toast.error(result.msg);
         }
       } catch (error) {
-        console.error(error);
+        navigate("/");
         toast.error("Error failed to fetch API request");
       }
     };
@@ -54,7 +54,6 @@ function CreateProperty() {
         }
       } catch (error) {
         toast.error("Error failed to fetch API request");
-        console.error("Error", error);
       }
     };
     fetchData();
@@ -77,7 +76,6 @@ function CreateProperty() {
         }
       } catch (error) {
         toast.error("Error failed to fetch API request");
-        console.error("Error", error);
       }
     };
     fetchData();
@@ -101,7 +99,6 @@ function CreateProperty() {
         }
       } catch (error) {
         toast.error("Error failed to fetch API request");
-        console.error("Error", error);
       }
     };
     fetchData();
@@ -198,7 +195,6 @@ function CreateProperty() {
       }
     } catch (error) {
       toast.error("Error failed to fetch API request");
-      console.error("Error", error);
     }
   };
 

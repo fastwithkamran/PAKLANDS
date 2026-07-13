@@ -36,7 +36,6 @@ function Navbar() {
               navigate("/");
             }
           } catch (error) {
-            console.error(error);
             toast.error("Error failed to fetch API request");
           }
         } else if (action === "AllPosts") {
@@ -55,7 +54,6 @@ function Navbar() {
               navigate("/");
             }
           } catch (error) {
-            console.error(error);
             toast.error("Error failed to fetch API request");
           }
         } else if (action === "Settings") {
@@ -74,7 +72,6 @@ function Navbar() {
               navigate("/");
             }
           } catch (error) {
-            console.error(error);
             toast.error("Error failed to fetch API request");
           }
         }
@@ -83,7 +80,6 @@ function Navbar() {
         navigate("/auth/login");
       }
     } catch (error) {
-      console.error(error);
       toast.error("Error failed to fetch API request");
     }
   };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 
 function PropertyPage() {
@@ -26,6 +26,7 @@ function PropertyPage() {
   const encodedMessage = encodeURIComponent(message);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +46,7 @@ function PropertyPage() {
           toast.error(result.msg);
         }
       } catch (error) {
-        console.error(error);
+        navigate("/");
         toast.error("Error failed to fetch API request");
       }
     };
@@ -84,7 +85,6 @@ function PropertyPage() {
         }
       } catch (error) {
         toast.error("Error failed to fetch API request");
-        console.error("Error", error);
       }
     };
     fetchData();

@@ -37,7 +37,7 @@ function Settings() {
           navigate("/");
         }
       } catch (error) {
-        console.error(error);
+        navigate("/");
         toast.error("Error failed to fetch API request");
       }
     };
@@ -67,7 +67,6 @@ function Settings() {
         }
       } catch (error) {
         toast.error("Error failed to fetch API request");
-        console.error("Error", error);
       }
     };
     fetchData();
@@ -110,7 +109,6 @@ function Settings() {
       }
     } catch (error) {
       toast.error("Error failed to fetch API request");
-      console.error("Error", error);
     }
   };
 
@@ -133,7 +131,6 @@ function Settings() {
         toast.error(result.msg);
       }
     } catch (error) {
-      console.error(error);
       toast.error("Error failed to fetch API request");
     }
   };
@@ -165,7 +162,6 @@ function Settings() {
         toast.error(result.msg);
       }
     } catch (error) {
-      console.error(error);
       toast.error("Error failed to fetch API request");
     }
   };

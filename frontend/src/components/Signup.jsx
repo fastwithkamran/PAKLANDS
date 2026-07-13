@@ -60,7 +60,6 @@ function Signup() {
       }
     } catch (error) {
       toast.error("Error failed to fetch API request");
-      console.error("Error", error);
     }
   };
 

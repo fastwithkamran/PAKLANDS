@@ -26,7 +26,7 @@ function AllPosts() {
           toast.error(result.msg);
         }
       } catch (error) {
-        console.error(error);
+        navigate("/");
         toast.error("Error failed to fetch API request");
       }
     };
@@ -49,7 +49,6 @@ function AllPosts() {
           toast.error(`Error ${response.msg}`);
         }
       } catch (error) {
-        console.error(error);
         toast.error("Error failed to fetch API request");
       }
     };
@@ -72,7 +71,6 @@ function AllPosts() {
         navigate("/auth/login");
       }
     } catch (error) {
-      console.error("Error", error);
       toast.error("Error while Fetching API from Frontend");
     }
   };
@@ -96,7 +94,6 @@ function AllPosts() {
         navigate(`/user/allposts/${userId}`);
       }
     } catch (error) {
-      console.error("Error", error);
       toast.error("Error while Fetching API from Frontend");
     }
   };
