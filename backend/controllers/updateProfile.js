@@ -43,4 +43,41 @@ const handleUpdateProfile = async (req, res) => {
   }
 };
 
-module.exports = handleUpdateProfile;
+const handleUpdatePassword = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { currentpassword, newpassword } = req.body;
+
+    const user = await User.findById(id);
+
+    if (!user) return res.status(400).json({ msg: "User not found" });
+
+    const salt = user.salt;
+    const hashedpassword = user.password;
+
+    const userProvidedHash = createHmac("sha256", salt)
+      .update(currentpassword)
+      .digest("hex");
+
+    if (hashedpassword != userProvidedHash)
+      return res.status(400).json({ msg: "Incorrect Current Password" });
+
+    const newHashedPassword = createHmac("sha256", salt)
+      .update(newpassword)
+      .digest("hex");
+
+    const userPasswordUpdate = await User.findByIdAndUpdate(id, newHashedPassword, {
+      returnDocument: "after",
+      runValidators: true,
+    });
+
+    if (!userPasswordUpdate) return res.status(400).json({ msg: "Password could not be updated" });
+
+    return res.status(200).json({ msg: "Password Updated" });
+
+  } catch (error) {
+    console.error("Error Updating Password ", error);
+    return res.status(500).json({ msg: "Password Could Not Updated" });
+  }
+};
+module.exports = {handleUpdateProfile, handleUpdatePassword};
