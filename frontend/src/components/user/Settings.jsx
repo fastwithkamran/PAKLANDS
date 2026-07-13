@@ -4,7 +4,12 @@ import { toast } from "react-hot-toast";
 import { useState, useEffect } from "react";
 
 function Settings() {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
   const { userId } = useParams();
 
@@ -13,6 +18,31 @@ function Settings() {
   const [email, setEmail] = useState("undefined");
   const [phone, setPhone] = useState("undefined");
   const [avator, setAvator] = useState("undefined");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_AUTH_VERIFICATION_API,
+          {
+            method: "GET",
+            credentials: "include",
+          },
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          toast.error(result.msg);
+          navigate("/");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Error failed to fetch API request");
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +120,7 @@ function Settings() {
         `${import.meta.env.VITE_ACCOUNT_DELETE}/${userId}`,
         {
           method: "DELETE",
+          credentials: "include",
         },
       );
 
@@ -114,7 +145,7 @@ function Settings() {
       if (!data.password) {
         toast.error("Current Password Not Found");
       }
-     
+
       if (!data.newpassword) {
         toast.error("New Password Not Found");
       }
@@ -173,16 +204,35 @@ function Settings() {
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
-          {...register("email")}
+          {...register("email", {
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: "Please provide a valid Email",
+            },
+          })}
           placeholder="Update your email"
         />
+        {errors?.email && (
+          <p className="bg-red-600 text-amber-50 mt-1">
+            {errors.email.message}
+          </p>
+        )}
         <label className="font-bold mt-3">Phone: {phone}</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
-          {...register("phone")}
+          {...register("phone", {
+            pattern: {
+              value: /^923\d{9}$/,
+              message:
+                "Please provide a valid Pakistani mobile number in 923123456789 format",
+            },
+          })}
           placeholder="Update your number"
         />
+        {errors?.phone && (
+          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+        )}
         <label className="font-bold mt-3">Update Avator</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
@@ -190,7 +240,6 @@ function Settings() {
           accept="image/png, image/jpeg, image/jpg, image/webp"
           {...register("avator")}
         />
-
         <button
           type="submit"
           className="bg-blue-500 text-white font-bold mt-3 mx-auto w-1/2 px-auto rounded-md hover:bg-gray-600"

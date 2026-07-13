@@ -3,7 +3,12 @@ import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 
 function Signup() {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -81,16 +86,39 @@ function Signup() {
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
-          {...register("email")}
+          {...register("email", {
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: "Please provide a valid Email",
+            },
+          })}
           placeholder="Enter your email"
         />
+        {errors?.email && (
+          <p className="mt-1 bg-red-600 text-amber-50 flex-nowrap">
+            {errors.email.message}
+          </p>
+        )}
+
         <label className="font-bold mt-3">Phone</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
           type="text"
-          {...register("phone")}
+          {...register("phone", {
+            pattern: {
+              value: /^923\d{9}$/,
+              message:
+                "Please provide a valid Pakistani mobile number in 923123456789 format",
+            },
+          })}
           placeholder="Enter your number"
         />
+        {errors?.phone && (
+          <p className="mt-1 bg-red-600 text-amber-50 flex-nowrap">
+            {errors.phone.message}
+          </p>
+        )}
+
         <label className="font-bold mt-3">Password</label>
         <input
           className="border border-gray-300 bg-amber-50 px-3"
