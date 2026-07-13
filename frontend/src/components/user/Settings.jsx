@@ -107,6 +107,38 @@ function Settings() {
     }
   };
 
+  const UpdatePassword = async (data) => {
+    try {
+      const formData = new formData();
+
+      if (!data.password) {
+        toast.error("Current Password Not Found");
+      }
+     
+      if (!data.newpassword) {
+        toast.error("New Password Not Found");
+      }
+      const response = await fetch(
+        `${import.meta.env.VITE_PASSWORD_UPDATE}/${userId}`,
+        {
+          method: "PATCH",
+        },
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success(result.msg);
+        navigate("/");
+      } else {
+        toast.error(result.msg);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error failed to fetch API request");
+    }
+  };
+
   return (
     <>
       <div className="mr-auto ml-2">
@@ -164,6 +196,34 @@ function Settings() {
           className="bg-blue-500 text-white font-bold mt-3 mx-auto w-1/2 px-auto rounded-md hover:bg-gray-600"
         >
           Update Account
+        </button>
+      </form>
+
+      <form
+        encType="multipart/form-data"
+        onSubmit={handleSubmit(UpdatePassword)}
+        className="w-full max-w-md lg:gap-2 gap-1 p-6 rounded-md bg-blue-300 flex flex-col mt-5"
+      >
+        <label className="font-bold">Current Password</label>
+        <input
+          className="border border-gray-300 bg-amber-50 px-3"
+          type="text"
+          {...register("password")}
+          placeholder="Enter your current password"
+        />
+        <label className="font-bold mt-3">New Password</label>
+        <input
+          className="border border-gray-300 bg-amber-50 px-3"
+          type="text"
+          {...register("newpassword")}
+          placeholder="Enter your new password"
+        />
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white font-bold mt-3 mx-auto w-1/2 px-auto rounded-md hover:bg-gray-600"
+        >
+          Update Password
         </button>
       </form>
 
