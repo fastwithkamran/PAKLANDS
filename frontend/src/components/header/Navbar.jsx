@@ -11,19 +11,23 @@ function Navbar() {
 
   const handleCheckAuthAndNavigate = async (event) => {
     try {
+      const action = event.currentTarget.dataset.action;
+
       const response = await fetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
         credentials: "include",
         method: "GET",
       });
 
       const result = await response.json();
-      const action = event.currentTarget.dataset.action;
 
       if (response.ok) {
         if (action === "CreateAd") navigate("/user/create-property");
         else if (action === "Logout") {
           try {
-            const response = await fetch(import.meta.env.VITE_LOGOUT_API);
+            const response = await fetch(import.meta.env.VITE_LOGOUT_API,{
+              method: "GET",
+              credentials: "include",
+            });
             const result = await response.json();
             if (response.ok) {
               navigate("/auth/login");
@@ -37,14 +41,15 @@ function Navbar() {
           }
         } else if (action === "AllPosts") {
           try {
-            const response = await fetch(import.meta.env.VITE.USERID, {
+            const response = await fetch(import.meta.env.VITE_USERID, {
               method: "GET",
-              credentials: true,
+              credentials: "include",
             });
 
             const result = await response.json();
+            
             if (response.ok) {
-              navigate(`/user/allposts/${result.id}`);
+              navigate(`/user/allposts/${result}`);
             } else {
               toast.error(`Error: ${result.msg}`);
               navigate("/");
@@ -55,14 +60,15 @@ function Navbar() {
           }
         } else if (action === "Settings") {
           try {
-            const response = await fetch(import.meta.env.VITE.USERID, {
+            const response = await fetch(import.meta.env.VITE_USERID, {
               method: "GET",
-              credentials: true,
+              credentials: "include",
             });
 
             const result = await response.json();
+            
             if (response.ok) {
-              navigate(`/user/settings/${result.id}`);
+              navigate(`/user/settings/${result}`);
             } else {
               toast.error(`Error: ${result.msg}`);
               navigate("/");
