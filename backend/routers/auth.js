@@ -42,6 +42,39 @@ router.get(
   },
 );
 
+router.get(
+  "/verify-auth/getUserID",
+  checkForAuthenticationCookie("token"),
+  (req, res) => {
+    return res.status(200).json(req.user._id);
+  },
+);
+
+const User = require("../models/user.js");
+router.get(
+  "/verify-auth/getUserPayload",
+  checkForAuthenticationCookie("token"),
+  async (req, res) => {
+    try {
+      const userData = await User.findById(req.user._id)
+        .select({
+          fullName: 1,
+          email: 1,
+          phone: 1,
+          avator: 1,
+        })
+        .lean();
+
+      if (!userData)
+        return res.status(400).json({ msg: "User Details not found" });
+      return res.status(200).json(userData);
+    } catch (error) {
+      console.error("Error Getting User Details ", error);
+      return res.status(500).json({ msg: "Cant find User Details" });
+    }
+  },
+);
+
 router.get("/logout", (req, res) => {
   try {
     res.clearCookie("token", {
@@ -53,6 +86,7 @@ router.get("/logout", (req, res) => {
 
     return res.status(200).json({ msg: "Logout Success" });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ msg: "Server Error During Logout" });
   }
 });
