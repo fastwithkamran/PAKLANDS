@@ -6,11 +6,28 @@ const handleUpdateProfile = async (req, res) => {
 
     const { fullName, email, phone } = req.body;
 
-    const user = User.findByIdAndUpdate(
-      id,
-      { fullName, email, phone },
-      { new: true, runValidators: true },
-    );
+    let avator = req.file ? req.file.secure_url : undefined;
+
+    if (email) {
+      const emailDuplicate = User.findOne({ email });
+      if (emailDuplicate)
+        return res.status(400).json({ msg: "This Email is already in use" });
+    }
+
+    if (phone) {
+      const phoneDuplicate = User.findOne({ phone });
+      if (phoneDuplicate)
+        return res.status(400).json({ msg: "This Phone is already in use" });
+    }
+
+    const updateData = { fullName, email, phone };
+
+    if (avator) updateData.avator = avator;
+
+    const user = await User.findByIdAndUpdate(id, updateData, {
+      returnDocument: "after",
+      runValidators: true,
+    });
 
     if (!user) return res.status(400).json({ msg: "User not found" });
 
