@@ -17,6 +17,11 @@ const handleUserLogin = async (req, res) => {
       })
       .json({ msg: "Login Success" });
   } catch (error) {
+    if (error.message === "User not found")
+      return res.status(400).json({ msg: "Invalid Email" });
+    if (error.message === "Incorrect Password or Email")
+      return res.status(400).json({ msg: "Incorrect Password or Email" });
+
     console.error("Error in Login Page ", error);
     return res.status(500).json({ msg: "Cannot Login" });
   }
