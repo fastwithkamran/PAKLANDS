@@ -2,9 +2,21 @@ const fs = require("fs");
 const path = require("path");
 const Location = require("../models/location");
 
-const handleSeedLocations = async (req, res) => {
+const handleSeedLocations = async () => {
   try {
+    const existingData = await Location.countDocuments();
+
+    if (existingData > 0) {
+      return;
+    }
+
     const filePath = path.join(__dirname, "location.geojson");
+
+    if (!fs.existsSync(filePath)) {
+      console.error("geoJson file not exist");
+      return;
+    }
+
     const rawData = fs.readFileSync(filePath);
     const result = JSON.parse(rawData);
 
@@ -16,21 +28,15 @@ const handleSeedLocations = async (req, res) => {
     }));
 
     const uniqueMap = new Map();
-
     Records.forEach((element) => {
       const key = `${element.city}-${element.area}`;
-      if (!uniqueMap.has(key)) {
-        uniqueMap.set(key, element);
-      }
+      if (!uniqueMap.has(key)) uniqueMap.set(key, element);
     });
 
     const insertRecords = Array.from(uniqueMap.values());
-
-    await Location.deleteMany({});
-    await Location.insertMany(insertRecords);
+    const seedResult = await Location.insertMany(insertRecords);
   } catch (error) {
-    console.error("Error Location Feeding ", error);
-    return res.status(500).json({msg: "Error Location Feeding"})
+    console.error("Error Location Seeding:", error.message);
   }
 };
 
