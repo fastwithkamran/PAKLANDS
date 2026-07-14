@@ -10,7 +10,7 @@ const handleUserDelete = async (req, res) => {
     res.clearCookie("token", {
       path: "/",
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
     });
     
