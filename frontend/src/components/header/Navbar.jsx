@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import apiFetch from "../../services/apiClient"
 
 function Navbar() {
   const location = useLocation();
@@ -13,7 +14,7 @@ function Navbar() {
     try {
       const action = event.currentTarget.dataset.action;
 
-      const response = await fetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
+      const response = await apiFetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
         credentials: "include",
         method: "GET",
       });
@@ -24,7 +25,7 @@ function Navbar() {
         if (action === "CreateAd") navigate("/user/create-property");
         else if (action === "Logout") {
           try {
-            const response = await fetch(import.meta.env.VITE_LOGOUT_API,{
+            const response = await apiFetch(import.meta.env.VITE_LOGOUT_API,{
               method: "GET",
               credentials: "include",
             });
@@ -36,11 +37,11 @@ function Navbar() {
               navigate("/");
             }
           } catch (error) {
-            toast.error("Error failed to fetch API request");
+            toast.error("Error failed to apiFetch API request");
           }
         } else if (action === "AllPosts") {
           try {
-            const response = await fetch(import.meta.env.VITE_USERID, {
+            const response = await apiFetch(import.meta.env.VITE_USERID, {
               method: "GET",
               credentials: "include",
             });
@@ -54,11 +55,11 @@ function Navbar() {
               navigate("/");
             }
           } catch (error) {
-            toast.error("Error failed to fetch API request");
+            toast.error("Error failed to apiFetch API request");
           }
         } else if (action === "Settings") {
           try {
-            const response = await fetch(import.meta.env.VITE_USERID, {
+            const response = await apiFetch(import.meta.env.VITE_USERID, {
               method: "GET",
               credentials: "include",
             });
@@ -72,7 +73,7 @@ function Navbar() {
               navigate("/");
             }
           } catch (error) {
-            toast.error("Error failed to fetch API request");
+            toast.error("Error failed to apiFetch API request");
           }
         }
       } else {
@@ -80,7 +81,7 @@ function Navbar() {
         navigate("/auth/login");
       }
     } catch (error) {
-      toast.error("Error failed to fetch API request");
+      toast.error("Error failed to apiFetch API request");
     }
   };
 

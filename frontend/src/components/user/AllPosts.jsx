@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useParams } from "react-router";
 import { toast } from "react-hot-toast";
+import apiFetch from "../../services/apiClient"
 
 function AllPosts() {
   const [properties, setProperties] = useState([]);
@@ -11,7 +12,7 @@ function AllPosts() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_AUTH_VERIFICATION_API,
           {
             method: "GET",
@@ -36,7 +37,7 @@ function AllPosts() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_PROPERTYINFO_ALLPOSTS_API}/${userId}`,
           {
             method: "GET",
@@ -57,7 +58,7 @@ function AllPosts() {
 
   const handlePropertyPage = async (id) => {
     try {
-      const response = await fetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
+      const response = await apiFetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
         credentials: "include",
         method: "GET",
       });
@@ -77,7 +78,7 @@ function AllPosts() {
 
   const handlePropertyDelete = async (id) => {
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${import.meta.env.VITE_PROPERTY_DELETE}/${id}`,
         {
           method: "DELETE",

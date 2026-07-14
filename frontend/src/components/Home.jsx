@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import apiFetch from "../services/apiClient"
 
 function Home() {
   const { register, watch } = useForm();
@@ -20,7 +21,7 @@ function Home() {
 
   const handlePropertyPage = async (id) => {
     try {
-      const response = await fetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
+      const response = await apiFetch(import.meta.env.VITE_AUTH_VERIFICATION_API, {
         credentials: "include",
         method: "GET",
       });
@@ -41,7 +42,7 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_PROPERTYINFO_HOME_API,
           {
             method: "GET",
@@ -65,7 +66,7 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_PROVINCES_LOCATION_API,
         );
 
@@ -87,7 +88,7 @@ function Home() {
     }
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_CITIES_LOCATION_API}?provinceName=${encodeURIComponent(selectedProvince)}`,
         );
 
@@ -110,7 +111,7 @@ function Home() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_AREAS_LOCATION_API}?cityName=${encodeURIComponent(selectedCity)}`,
         );
 
@@ -138,7 +139,7 @@ function Home() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_FILTER_API}?${queryParams.toString()}`,
         );
         const result = await response.json();

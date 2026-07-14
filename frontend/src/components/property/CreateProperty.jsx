@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
+import apiFetch from "../../services/apiClient"
 
 function CreateProperty() {
   const { register, handleSubmit, reset, watch } = useForm();
@@ -19,7 +20,7 @@ function CreateProperty() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_AUTH_VERIFICATION_API,
           {
             method: "GET",
@@ -44,7 +45,7 @@ function CreateProperty() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_PROVINCES_LOCATION_API,
         );
 
@@ -66,7 +67,7 @@ function CreateProperty() {
     }
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_CITIES_LOCATION_API}?provinceName=${encodeURIComponent(selectedProvince)}`,
         );
 
@@ -89,7 +90,7 @@ function CreateProperty() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_AREAS_LOCATION_API}?cityName=${encodeURIComponent(selectedCity)}`,
         );
 
@@ -178,7 +179,7 @@ function CreateProperty() {
         });
       }
 
-      const response = await fetch(import.meta.env.VITE_CREATE_POST_API, {
+      const response = await apiFetch(import.meta.env.VITE_CREATE_POST_API, {
         method: "POST",
         body: formData,
         credentials: "include",

@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router";
 import { toast } from "react-hot-toast";
+import apiFetch from "../services/apiClient"
 
 function Login() {
   const {
@@ -28,7 +29,7 @@ function Login() {
       formData.append("email", data.email);
       formData.append("password", data.password);
 
-      const response = await fetch(import.meta.env.VITE_LOGIN_API, {
+      const response = await apiFetch(import.meta.env.VITE_LOGIN_API, {
         method: "POST",
         credentials: "include",
         body: formData,

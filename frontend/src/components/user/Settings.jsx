@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useParams, Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { useState, useEffect } from "react";
+import apiFetch from "../../services/apiClient"
 
 function Settings() {
   const {
@@ -22,7 +23,7 @@ function Settings() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_AUTH_VERIFICATION_API,
           {
             method: "GET",
@@ -47,7 +48,7 @@ function Settings() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_AUTH_AND_USERPAYLOAD,
           {
             method: "GET",
@@ -90,7 +91,7 @@ function Settings() {
         formData.append("avator", data.avator[0]);
       }
 
-      const response = await fetch(
+      const response = await apiFetch(
         `${import.meta.env.VITE_UPDATE_USERAPI}/${userId}`,
         {
           method: "PATCH",
@@ -114,7 +115,7 @@ function Settings() {
 
   const handleAccountDelete = async () => {
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `${import.meta.env.VITE_ACCOUNT_DELETE}/${userId}`,
         {
           method: "DELETE",
@@ -152,7 +153,7 @@ function Settings() {
       formData.append("currentpassword", data.password);
       formData.append("newpassword", data.newpassword);
 
-      const response = await fetch(
+      const response = await apiFetch(
         `${import.meta.env.VITE_PASSWORD_UPDATE}/${userId}`,
         {
           method: "PATCH",

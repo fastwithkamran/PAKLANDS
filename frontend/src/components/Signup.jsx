@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
+import apiFetch from "../services/apiClient"
 
 function Signup() {
   const {
@@ -44,7 +45,7 @@ function Signup() {
         formData.append("avator", data.avator[0]);
       }
 
-      const response = await fetch(import.meta.env.VITE_SIGNUP_API, {
+      const response = await apiFetch(import.meta.env.VITE_SIGNUP_API, {
         method: "POST",
         body: formData,
         credentials: "include",

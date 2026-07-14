@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
+import apiFetch from "../../services/apiClient"
 
 function PropertyPage() {
   const [title, setTitle] = useState("undefined");
@@ -17,7 +18,7 @@ function PropertyPage() {
   const [sellerEmail, setSellerEmail] = useState("undefined");
   const [sellerPhoneNumber, setSellerPhoneNumber] = useState("undefined");
   const [sellerProfileImage, setSellerProfileImage] = useState(
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIDHxvLx7p1wY2xK4Xvet4kdrXToHtv1X5dLVDoQ57GQ&s=10",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNupSKjnCIs8Z8mbmI3Nm1Huhj_wEEm-BQo522KiZjAg&s=10",
   );
   const subject = `PAKLANDS: Customer is Interested in ${title}`;
   const body = `Hey, ${sellerName}\n\nCustomer is Interest for your property ${title} through PakLands... Reply this Email as Soon`;
@@ -31,7 +32,7 @@ function PropertyPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           import.meta.env.VITE_AUTH_VERIFICATION_API,
           {
             method: "GET",
@@ -56,7 +57,7 @@ function PropertyPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `${import.meta.env.VITE_PROPERTY_INFO_API}/${id}`,
           {
             method: "GET",
