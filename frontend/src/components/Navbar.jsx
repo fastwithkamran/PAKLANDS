@@ -1,7 +1,9 @@
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 function Navbar() {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <>
       <header className="bg-slate-200 shadow-md">
@@ -17,7 +19,7 @@ function Navbar() {
             />
             <FaSearch className="text-slate-600" />
           </form>
-          <ul className="flex gap-4">
+          <ul className="flex gap-4 items-center">
             <Link to="/">
               <li className="hidden sm:inline text-slate-700 hover:underline">
                 Home
@@ -28,9 +30,19 @@ function Navbar() {
                 About
               </li>
             </Link>
-            <Link to="/auth/login">
-              <li className="text-slate-700 hover:underline">Login</li>
-            </Link>
+            {!currentUser ? (
+              <Link to="/auth/login">
+                <li className="text-slate-700 hover:underline">Login</li>
+              </Link>
+            ) : (
+              <Link to={"/user/settings"}>
+                <img
+                  src={currentUser.avator}
+                  alt="profile"
+                  className="rounded-full h-10 w-10 object-cover"
+                ></img>
+              </Link>
+            )}
           </ul>
         </div>
       </header>
