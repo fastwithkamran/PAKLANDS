@@ -3,8 +3,10 @@ import { toast } from "react-hot-toast";
 import { app } from "../firebase.js";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/user/userSlice.js";
+import { useNavigate } from "react-router";
 
 function OAuth() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleGoogleClick = async () => {
@@ -14,20 +16,20 @@ function OAuth() {
 
       const result = await signInWithPopup(auth, provider);
 
-      const response = fetch("/api/auth/google", {
+      const response = await fetch("/api/user/google", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          name: result.user.displayName,
+          fullName: result.user.displayName,
           email: result.user.email,
           avator: result.user.photoURL,
         }),
       });
-
       const data = await response.json();
       dispatch(loginSuccess(data));
+      navigate("/");
     } catch (error) {
       if (import.meta.env.VITE_ERROR === "development") console.error(error);
       toast.error("Error failed to fetch API request");
