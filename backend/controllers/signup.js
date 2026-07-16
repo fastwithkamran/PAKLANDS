@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { createTokenForUser } = require("../services/auth");
 require("dotenv").config();
 
 const handleUserSignUp = async (req, res) => {
@@ -9,23 +10,21 @@ const handleUserSignUp = async (req, res) => {
     if (emailDuplicate)
       return res.status(400).json({ msg: "This Email is already in use" });
 
-    const phoneDuplicate = await User.findOne({ phone });
-    if (phoneDuplicate)
-      return res.status(400).json({ msg: "This Phone is already in use" });
-
     const avatorUrl = req.file
       ? req.file.secure_url
       : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNupSKjnCIs8Z8mbmI3Nm1Huhj_wEEm-BQo522KiZjAg&s=10";
 
-    await User.create({
+    const user = await User.create({
       fullName,
       email,
-      phone,
       password,
       avator: avatorUrl,
     });
 
-    const token = await User.matchPasswordandGenerateToken(email, password);
+    const userData = user.toObject();
+    const { _id, fullName, email, avator } = userData;
+
+    const token = createTokenForUser(user);
 
     return res
       .status(201)
@@ -36,10 +35,8 @@ const handleUserSignUp = async (req, res) => {
         sameSite: "strict",
         maxAge: 90 * 24 * 60 * 60 * 1000,
       })
-      .json({ msg: "Account Created" });
+      .json({ _id, fullName, email, avator });
   } catch (error) {
-    if (error.message === "User not found")
-      return res.status(400).json({ msg: "Invalid Email" });
     if (error.message === "Incorrect Password or Email")
       return res.status(400).json({ msg: "Incorrect Password or Email" });
 
@@ -53,4 +50,43 @@ const handleUserSignUp = async (req, res) => {
   }
 };
 
-module.exports = handleUserSignUp;
+const handleGoogleAuth = async (req, res, next) => {
+  try {
+    const { displayName, email, photoURL } = req.body;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        fullName: displayName,
+        email,
+        avator: photoURL,
+      });
+    }
+
+    const userData = user.toObject();
+    const { _id, fullName, email, avator } = userData;
+
+    const token = createTokenForUser(user);
+
+    return res
+      .status(201)
+      .cookie("token", token, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 90 * 24 * 60 * 60 * 1000,
+      })
+      .json({ _id, fullName, email, avator });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const field = Object.keys(error.errors)[0];
+      return res.status(400).json({ msg: error.errors[field].message });
+    }
+
+    console.error("Error in Google SignUp ", error);
+    return res.status(500).json({ msg: "Account Not Created" });
+  }
+};
+
+module.exports = { handleUserSignUp, handleGoogleAuth };
