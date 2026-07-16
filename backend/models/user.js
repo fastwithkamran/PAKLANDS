@@ -19,21 +19,11 @@ const userSchema = new Schema(
         message: "Please provide a valid email address",
       },
     },
-    phone: {
-      type: Number,
-      required: [true, "Phone Number not found"],
-      unique: true,
-      match: [
-        /^923\d{9}$/,
-        "Please provide a valid Pakistani mobile number in 923123456789 format",
-      ],
-    },
     salt: {
       type: String,
     },
     password: {
       type: String,
-      required: [true, "Password not provided"],
     },
     avator: {
       type: String,
@@ -60,7 +50,7 @@ userSchema.static(
   async function (email, password) {
     const user = await this.findOne({ email });
 
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error("Incorrect Password or Email");
 
     const salt = user.salt;
     const hashedpassword = user.password;
