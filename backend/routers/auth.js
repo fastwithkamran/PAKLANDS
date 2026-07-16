@@ -25,10 +25,14 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage });
 
 const handleUserLogin = require("../controllers/login.js");
-const handleUserSignUp = require("../controllers/signup.js");
+const {
+  handleUserSignUp,
+  handleGoogleAuth,
+} = require("../controllers/signup.js");
 
 router.post("/signup", upload.single("avator"), handleUserSignUp);
 router.post("/login", upload.none(), handleUserLogin);
+router.post("/auth/google", handleGoogleAuth);
 
 const {
   checkForAuthenticationCookie,
