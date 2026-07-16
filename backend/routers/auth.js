@@ -32,7 +32,7 @@ const {
 
 router.post("/signup", upload.single("avator"), handleUserSignUp);
 router.post("/login", upload.none(), handleUserLogin);
-router.post("/auth/google", handleGoogleAuth);
+router.post("/google", handleGoogleAuth);
 
 const {
   checkForAuthenticationCookie,

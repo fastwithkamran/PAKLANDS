@@ -12,7 +12,7 @@ const handleUserLogin = async (req, res) => {
     const token = await User.matchPasswordandGenerateToken(email, password);
 
     const userData = user.toObject();
-    const { _id, fullName, email, avator } = userData;
+    const { _id, fullName, avator } = userData;
 
     return res
       .status(201)

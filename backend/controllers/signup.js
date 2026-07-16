@@ -22,7 +22,7 @@ const handleUserSignUp = async (req, res) => {
     });
 
     const userData = user.toObject();
-    const { _id, fullName, email, avator } = userData;
+    const { _id, avator } = userData;
 
     const token = createTokenForUser(user);
 
@@ -52,19 +52,19 @@ const handleUserSignUp = async (req, res) => {
 
 const handleGoogleAuth = async (req, res, next) => {
   try {
-    const { displayName, email, photoURL } = req.body;
+    const { fullName , email, avator } = req.body;
 
     let user = await User.findOne({ email });
     if (!user) {
       user = await User.create({
-        fullName: displayName,
+        fullName,
         email,
-        avator: photoURL,
+        avator,
       });
     }
 
     const userData = user.toObject();
-    const { _id, fullName, email, avator } = userData;
+    const { _id } = userData;
 
     const token = createTokenForUser(user);
 
