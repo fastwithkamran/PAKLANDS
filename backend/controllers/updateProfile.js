@@ -5,7 +5,7 @@ const handleUpdateProfile = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const { fullName, email, phone } = req.body;
+    let { fullName, email } = req.body;
 
     let avator = req.file ? req.file.secure_url : undefined;
 
@@ -15,13 +15,7 @@ const handleUpdateProfile = async (req, res) => {
         return res.status(400).json({ msg: "This Email is already in use" });
     }
 
-    if (phone) {
-      const phoneDuplicate = await User.findOne({ phone });
-      if (phoneDuplicate)
-        return res.status(400).json({ msg: "This Phone is already in use" });
-    }
-
-    const updateData = { fullName, email, phone };
+    const updateData = { fullName, email };
 
     if (avator) updateData.avator = avator;
 
@@ -32,7 +26,16 @@ const handleUpdateProfile = async (req, res) => {
 
     if (!user) return res.status(400).json({ msg: "User not found" });
 
-    return res.status(200).json({ msg: "Profile Updated" });
+    const userData = user.toObject();
+
+    return res
+      .status(200)
+      .json({
+        _id: userData._id,
+        fullName: userData.fullName,
+        email: userData.email,
+        avator: userData.avator,
+      });
   } catch (error) {
     if (error.name === "ValidationError") {
       const field = Object.keys(error.errors)[0];
@@ -85,4 +88,5 @@ const handleUpdatePassword = async (req, res) => {
     return res.status(500).json({ msg: "Password Could Not Updated" });
   }
 };
+
 module.exports = { handleUpdateProfile, handleUpdatePassword };
