@@ -8,6 +8,7 @@ import {
   loginSuccess,
 } from "../redux/user/userSlice.js";
 import OAuth from "../components/OAuth";
+import { useState } from "react";
 
 function Signup() {
   const {
@@ -18,6 +19,10 @@ function Signup() {
   } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [avatorURL, setAvatorURL] = useState(
+    "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg",
+  );
 
   const { loading } = useSelector((state) => state.user);
 
@@ -78,6 +83,30 @@ function Signup() {
         className="flex flex-col gap-4 decoration-0"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <label htmlFor="avator" className="flex justify-center">
+          <img
+            src={avatorURL}
+            alt="Avator"
+            className="w-20 h-20 object-cover rounded-full cursor-pointer"
+          />
+        </label>
+        <input
+          hidden
+          id="avator"
+          type="file"
+          accept="image/*"
+          {...register("avator", {
+            onChange: (e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                if (avatorURL.startsWith("blob:"))
+                  URL.revokeObjectURL(avatorURL);
+              }
+              setAvatorURL(URL.createObjectURL(file));
+              toast.success("Image Uploaded Successfully");
+            },
+          })}
+        />
         <input
           type="text"
           className="border-none bg-amber-50 p-3 rounded-lg sm:pr-64"
@@ -108,12 +137,6 @@ function Signup() {
           type="password"
           {...register("password")}
           placeholder="Password"
-        />
-        <input
-          className="border-none  bg-amber-50 p-3 rounded-lg"
-          type="file"
-          accept="image/png, image/jpeg, image/jpg, image/webp"
-          {...register("avator")}
         />
         <button
           disable={loading ? "false" : "true"}
