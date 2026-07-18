@@ -18,22 +18,24 @@ import {
   Signup,
   Login,
   Home,
-  CreateProperty,
+  CreateListing,
   PropertyPage,
-  Settings,
-  AllPosts,
+  Search,
+  Profile,
+  UserListings,
 } from "./pages";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/" element={<Home />} />
-      <Route path="/user/create-property" element={<CreateProperty />} />
-      <Route path="/user/property-page/:id" element={<PropertyPage />} />
-      <Route path="/auth/signup" element={<Signup />} />
-      <Route path="/auth/login" element={<Login />} />
-      <Route path="/user/settings/:userId" element={<Settings />} />
-      <Route path="/user/allposts/:userId" element={<AllPosts />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/create-listing" element={<CreateListing />} />
+      <Route path="/listing-page/:id" element={<PropertyPage />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/userListings" element={<UserListings />} />
     </Route>,
   ),
 );

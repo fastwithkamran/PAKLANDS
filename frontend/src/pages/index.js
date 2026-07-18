@@ -2,18 +2,20 @@ import Signup from "./Signup.jsx";
 import Login from "./Login.jsx";
 import Home from "./Home.jsx";
 
-import CreateProperty from "./property/CreateProperty.jsx";
-import PropertyPage from "./property/PropertyPage.jsx";
+import CreateListing from "./CreateListing.jsx";
+import PropertyPage from "./PropertyPage.jsx";
+import Search from "./Search.jsx";
 
-import Settings from "./user/Settings.jsx";
-import AllPosts from "./user/AllPosts.jsx";
+import Profile from "./Profile.jsx";
+import UserListings from "./UserListings.jsx";
 
 export {
   Signup,
   Login,
   Home,
-  CreateProperty,
+  CreateListing,
   PropertyPage,
-  Settings,
-  AllPosts,
+  Search,
+  Profile,
+  UserListings,
 };
