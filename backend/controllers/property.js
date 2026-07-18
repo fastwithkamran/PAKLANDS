@@ -47,11 +47,11 @@ const handleCreateProperty = async (req, res) => {
       bathrooms,
       parking,
       furnish,
+      propertyImages,
     };
 
     if (phone !== "null") {
-      console.log(phone);
-      const phoneDuplicate = Property.findOne({ phone });
+      const phoneDuplicate = await Property.findOne({ phone: phone });
       if (phoneDuplicate)
         return res.status(400).json({ msg: "This Phone is already in use" });
 
