@@ -302,13 +302,19 @@ function CreateListing() {
                   {...register("type")}
                   className="border-none bg-amber-50 p-1 w-full font-medium rounded-lg"
                 >
-                  <option key={"Residential"} value={"residential"}>
+                  <option
+                    key={"Residential (houses, flats)"}
+                    value={"Residential (houses, flats)"}
+                  >
                     Residential (houses, flats)
                   </option>
-                  <option key={"Commercial"} value={"commercial"}>
+                  <option
+                    key={"Commercial (offices, shops)"}
+                    value={"Commercial (offices, shops)"}
+                  >
                     Commercial (offices, shops)
                   </option>
-                  <option key={"Land"} value={"land"}>
+                  <option key={"Land/Plots"} value={"Land/Plots"}>
                     Land/Plots
                   </option>
                 </select>
