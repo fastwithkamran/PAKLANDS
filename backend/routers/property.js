@@ -29,11 +29,10 @@ const handleCreateProperty = require("../controllers/property");
 const {
   handleUserProperties,
   handleDeletePropety,
-  handleAllProperties,
   handlePropertyPage,
 } = require("../controllers/handleProperties");
 
-const handlePropertyFilter = require("../services/filter");
+const handleAllProperties = require("../services/filter");
 
 router.post(
   "/createProperty",
@@ -46,10 +45,8 @@ router.get("/userProperties/:id", handleUserProperties);
 
 router.get("/propertyInfo/:id", handlePropertyPage);
 
-router.get("/allProperties/:id", handleAllProperties);
+router.get("/allProperties", handleAllProperties);
 
 router.delete("/delete/:id", handleDeletePropety);
-
-router.get("/filter", handlePropertyFilter);
 
 module.exports = router;

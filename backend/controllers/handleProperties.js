@@ -14,6 +14,7 @@ const handleUserProperties = async (req, res) => {
         price: 1,
         bedrooms: 1,
         bathrooms: 1,
+        furnish: 1,
         propertyImages: { $slice: 1 },
       })
       .lean();
@@ -36,30 +37,6 @@ const handleDeletePropety = async (req, res) => {
     }
   } catch (error) {
     console.error("Error Deleting Property", error);
-    return res.status(500).json({ msg: "Server failed to send data" });
-  }
-};
-
-const handleAllProperties = async (req, res) => {
-  try {
-    const result = await Property.find({})
-      .select({
-        _id: 1,
-        title: 1,
-        type: 1,
-        province: 1,
-        city: 1,
-        price: 1,
-        bedrooms: 1,
-        bathrooms: 1,
-        propertyImages: { $slice: 1 },
-      })
-      .lean();
-
-    if (!result) return res.status(500).json({ msg: "Cannot Find Properties" });
-    return res.status(200).json(result);
-  } catch (error) {
-    console.error("Error", error);
     return res.status(500).json({ msg: "Server failed to send data" });
   }
 };
@@ -103,6 +80,5 @@ const handlePropertyPage = async (req, res) => {
 module.exports = {
   handleUserProperties,
   handleDeletePropety,
-  handleAllProperties,
   handlePropertyPage,
 };
