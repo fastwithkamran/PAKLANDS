@@ -101,6 +101,7 @@ function Profile() {
 
       if (response.ok) {
         navigate("/");
+        toast.success("Account Deleted");
         dispatch(deleteUserSuccess(result));
       } else {
         dispatch(deleteUserFailure(result.msg));
