@@ -14,7 +14,7 @@ function App() {
         <nav className="mb-3">
           <Navbar />
         </nav>
-        <main className="flex flex-col grow justify-center items-center p-auto">
+        <main className="flex flex-col grow items-center p-auto">
           <Outlet />
         </main>
         <footer className="mt-3">
