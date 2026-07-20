@@ -160,7 +160,7 @@ function Profile() {
     <>
       <div className="mr-auto ml-2">
         <button
-          navigate="-1"
+          onClick = {() => navigate(-1)}
           className="text-2xl font-medium text-slate-500 hover:text-blue-600"
         >
           Back
